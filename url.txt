@@ -1,0 +1,37 @@
+session 1
+
+session 2
+https://colab.research.google.com/github/ivpcl/REVISION-3-Level-1-2019-English/blob/main/Session%202/To%20be%20implemented/Original%20Programming%20with%20Algebra%20and%20Strings.ipynb?authuser=5
+https://colab.research.google.com/github/ivpcl/REVISION-3-Level-1-2019-English/blob/main/Session%202/To%20be%20implemented/Session%202-%20Introduction%20to%20Python%20Programming%20-%20Marios.ipynb?authuser=5
+https://colab.research.google.com/github/ivpcl/REVISION-3-Level-1-2019-English/blob/main/Session%202/To%20be%20implemented/Session%202-%20Introduction%20to%20Python%20Programming.ipynb?authuser=5
+https://colab.research.google.com/github/ivpcl/REVISION-3-Level-1-2019-English/blob/main/Session%202/To%20be%20implemented/Session%202-%20Old.ipynb?authuser=5
+https://colab.research.google.com/github/ivpcl/REVISION-3-Level-1-2019-English/blob/main/Session%202/To%20be%20implemented/Session%202-.ipynb?authuser=5
+https://colab.research.google.com/github/ivpcl/REVISION-3-Level-1-2019-English/blob/main/Session%202/To%20be%20implemented/Session%202-2.1.ipynb?authuser=5
+https://colab.research.google.com/github/ivpcl/REVISION-3-Level-1-2019-English/blob/main/Session%202/To%20be%20implemented/Session%202-2.2.ipynb?authuser=5
+https://colab.research.google.com/github/ivpcl/REVISION-3-Level-1-2019-English/blob/main/Session%202/To%20be%20implemented/Session%202-2.3.ipynb?authuser=5
+https://colab.research.google.com/github/ivpcl/REVISION-3-Level-1-2019-English/blob/main/Session%202/To%20be%20implemented/Session%202.ipynb?authuser=5
+
+session 3
+https://colab.research.google.com/github/ivpcl/REVISION-3-Level-1-2019-English/blob/main/Session%203/To%20be%20implemented/game.ipynb?authuser=5
+https://colab.research.google.com/github/ivpcl/REVISION-3-Level-1-2019-English/blob/main/Session%203/To%20be%20implemented/challenge.ipynb?authuser=5
+https://colab.research.google.com/github/ivpcl/REVISION-3-Level-1-2019-English/blob/main/Session%203/To%20be%20implemented/Session3-1-simplified.ipynb?authuser=5
+https://colab.research.google.com/github/ivpcl/REVISION-3-Level-1-2019-English/blob/main/Session%203/To%20be%20implemented/Session3-1-last.ipynb?authuser=5
+https://colab.research.google.com/github/ivpcl/REVISION-3-Level-1-2019-English/blob/main/Session%203/To%20be%20implemented/Session%203-Loops.ipynb?authuser=5
+https://colab.research.google.com/github/ivpcl/REVISION-3-Level-1-2019-English/blob/main/Session%203/To%20be%20implemented/Session%203-1.ipynb?authuser=5
+https://colab.research.google.com/github/ivpcl/REVISION-3-Level-1-2019-English/blob/main/Session%203/To%20be%20implemented/Session%203-1-3.3.ipynb?authuser=5
+https://colab.research.google.com/github/ivpcl/REVISION-3-Level-1-2019-English/blob/main/Session%203/To%20be%20implemented/Session%203-1-3.2.ipynb?authuser=5
+https://colab.research.google.com/github/ivpcl/REVISION-3-Level-1-2019-English/blob/main/Session%203/To%20be%20implemented/Session%203-1-3.1.ipynb?authuser=5
+https://colab.research.google.com/github/ivpcl/REVISION-3-Level-1-2019-English/blob/main/Session%203/To%20be%20implemented/OLD-Session%203-2.ipynb?authuser=5
+https://colab.research.google.com/github/ivpcl/REVISION-3-Level-1-2019-English/blob/main/Session%203/To%20be%20implemented/NumGame.ipynb?authuser=5
+session 4
+
+session 5
+https://colab.research.google.com/github/ivpcl/REVISION-3-Level-1-2019-English/blob/main/Session%205/To%20be%20implemented/BWex.ipynb?authuser=5
+https://colab.research.google.com/github/ivpcl/REVISION-3-Level-1-2019-English/blob/main/Session%205/To%20be%20implemented/BW2.ipynb?authuser=5
+https://colab.research.google.com/github/ivpcl/REVISION-3-Level-1-2019-English/blob/main/Session%205/To%20be%20implemented/BW1.ipynb?authuser=5
+
+session 6
+https://colab.research.google.com/github/ivpcl/REVISION-3-Level-1-2019-English/blob/main/Session%206/to%20be%20implemented/head.ipynb?authuser=5
+
+session 7
+
