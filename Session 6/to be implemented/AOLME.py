@@ -529,7 +529,7 @@ def rotate_img(img,degrees): #previously  me_imrotate
     M = cv2.getRotationMatrix2D(center, degrees, 1.0)
     rotated = cv2.warpAffine(img, M, (w, h))
     show_img(rotated)
-    return rotated
+    #return rotated
     
 def crop_img(img,ranges):#previously me_imcrop
     '''
