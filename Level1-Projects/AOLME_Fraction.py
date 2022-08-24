@@ -318,7 +318,7 @@ def vid_show(vid,fps):    #previously aolme_vidshow
         # set the data in the axesimage object
         frame = make_rgb(vid[j])
         im.set_array(frame)
-        #pyplot.draw()
+        pyplot.draw()
         return im,
     # kick off the animation
     if (grid_lines):
@@ -327,8 +327,8 @@ def vid_show(vid,fps):    #previously aolme_vidshow
     else:
         ani = animation.FuncAnimation(fig, update_fig, frames=range(len(vid)),
                                 interval = fps, blit=True, repeat=True)
-    #pyplot.tight_layout()
-    #pyplot.show()
+    pyplot.tight_layout()
+    pyplot.show()
 	
     return ani
 	
