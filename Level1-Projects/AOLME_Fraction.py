@@ -20,17 +20,31 @@ easy_messages = None #if you don't want traceback turn this on
 if easy_messages:
     sys.tracebacklimit = 0
 
-def grid_lines_on(width, height):
+def grid_lines_on(width, height, numerator):
     fig1, ax = pyplot.subplots() # make figure 
+    
     ax.grid(linestyle='-',linewidth=0.5)
-        
-    xticks = np.arange(-0.5,height -0.5,1)
+    #ax.grid(linestyle='-',which='both')
+    xticks = np.arange(-0.5,height+0.5 ,1)
     yticks = np.arange(-0.5, width-0.5,1)
+    
+    #yticks = np.arange(0, 1, 1)
 
     ax.set_xticks(xticks)
-    ax.set_xticklabels([int(y+0.5) for y in xticks])
-    ax.set_yticks(yticks )
-    ax.set_yticklabels([int(x+0.5) for x in yticks ])
+    x_middle_labels = [(str(y)+'/'+str(height)) for y in np.arange(1, height)]
+    x_labels = [0]
+    x_labels.extend(x_middle_labels)
+    x_labels.append(1)
+    ax.set_xticklabels(x_labels)
+    
+    
+    ax.set_yticks(yticks)
+    ax.set_yticklabels([int(x+0.5) for x in yticks])
+    
+    ax.tick_params(axis='y', which='both', labelleft='on', labelright='on')
+    
+    # Adding title
+    ax.title.set_text(str(numerator)+'/'+str(height))
     return fig1,ax
 
 def check_input(img,which_lib):
@@ -282,7 +296,7 @@ def  im_print(matrix): #previously aolme_imprint
 
     return None;
     
-def vid_show(vid,fps):    #previously aolme_vidshow
+def vid_show(vid,numerator,fps):    #previously aolme_vidshow
     '''
   A function that 'plays' a list of frame, creating a 2d video. Note, this must be set equal to some value to work!!!
   
@@ -295,11 +309,12 @@ def vid_show(vid,fps):    #previously aolme_vidshow
   
   '''
     matrixf = make_rgb(vid[0]) 
+    #print(matrixf.shape[0], matrixf.shape[1])
     if not grid_lines:
         fig = pyplot.figure(2)
         pyplot.tick_params(axis='both', which='both', bottom='off', top='off', labelbottom='off', right='off', left='off', labelleft='off')
     else:
-        fig1,ax = grid_lines_on(matrixf.shape[0],matrixf.shape[1])
+        fig1,ax = grid_lines_on(matrixf.shape[0],matrixf.shape[1], numerator)
     fps = 1000./fps  
     if len(vid) < 1:
         print ("Incorrect input, make sure you give function a video to play!")
