@@ -98,9 +98,6 @@ def FracMultColors(numerator, denominator, mult):
     
     else:
         frame_list = []
-        start_col = 0
-        start_row = 0
-        color_index = 0
       
         # Decide number of rows
         re = divmod(numerator*mult, denominator)
@@ -141,7 +138,7 @@ def FracMultColors(numerator, denominator, mult):
 def grid_lines_on(width, height, numerator):
 
     fig1, ax = pyplot.subplots() # make figure 
-    ax.grid(linestyle='-',linewidth=0.5)
+    ax.grid(linestyle='-',linewidth=1)
     xticks = np.arange(-0.5,height+0.5 ,1)
     yticks = np.arange(-0.5, width-0.5,1)
     
@@ -441,7 +438,7 @@ def vid_show(vid,numerator,fps):    #previously aolme_vidshow
                 frame = frame[0:20,0:20]
                 vid[i]=frame
                 i+=1
-    im = pyplot.imshow(matrixf, interpolation='none')
+    im = pyplot.imshow(matrixf, interpolation='none', aspect='auto')
         
     # function to update figure
     def update_fig(j):
