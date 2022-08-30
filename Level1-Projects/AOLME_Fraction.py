@@ -17,18 +17,134 @@ grid_lines = True
 SAFE = True 
 easy_messages = None #if you don't want traceback turn this on
 
+# Define all of the colors
+white = "ffffff"
+
+color_dict = {"red":"ff0000",
+              "green":"00ff00",
+              "blue":"0000ff", 
+              "yellow":"ffff00",
+              "cyan":"00ffff",
+              "magenta":"ff00ff"}
+                        
 if easy_messages:
     sys.tracebacklimit = 0
 
-def grid_lines_on(width, height, numerator):
-    fig1, ax = pyplot.subplots() # make figure 
+
+def Mult(numerator, denominator, mult):
+    new_frac_numerator = numerator*mult
+    Frac(new_frac_numerator, denominator)
+    return
+
+def Div(numerator, denominator, div):
+    new_frac_denominator = denominator*div
+    Frac(numerator, new_frac_denominator)
+    return
+
+
+def FracDiv(numerator_1, denominator_1,
+            numerator_2, denominator_2):
+    new_frac_numerator   =  numerator_1*denominator_2
+    new_frac_denominator =  denominator_1*numerator_2
+    Frac(new_frac_numerator, new_frac_denominator)
+    return
+
+
+def Frac(numerator, denominator):
+    if denominator == 0:
+        print("Error: The denominator cannot be zero!")
+        return 
     
+    if numerator == 0:
+        # Create a frame with white background color
+        frame = np.array([["ffffff"]*denominator for row in range (1)])
+        # Video play
+        play_video= vid_show([frame], numerator, 1) # play on screen
+        return play_video
+    
+    re = divmod(numerator, denominator)
+    quo = re[0]
+    rem = re[1]
+
+    if rem == 0:
+      rows = quo
+    else:
+      rows = quo + 1
+    
+    # Create a frame with white background color
+    frame = np.array([["ffffff"]*denominator for row in range (rows)])
+     
+    if numerator<denominator:     
+        # Fill the vector
+        im_fill(frame, [0, 0], [0, numerator-1], color_dict.get("red"))
+    else:
+        im_fill(frame, [0, quo-1], [0, denominator-1], color_dict.get("red"))
+
+        if rem != 0:
+            im_fill(frame, [rows-1, rows-1], [0, rem-1], color_dict.get("red"))
+
+   
+    
+    # Video play
+    play_video= vid_show([frame], numerator, 1) # play on screen
+    
+    return play_video
+
+
+def FracMultColors(numerator, denominator, mult):
+    
+    if numerator == 0 or denominator == 0 or mult == 0 or mult == 1:
+        return Frac(numerator*mult, denominator)
+    
+    else:
+        frame_list = []
+        start_col = 0
+        start_row = 0
+        color_index = 0
+      
+        # Decide number of rows
+        re = divmod(numerator*mult, denominator)
+        quo = re[0]
+        rem = re[1]
+      
+        if rem == 0:
+          rows = quo
+        else:
+          rows = quo + 1
+      
+        # Create a frame with white background color
+        frame = np.array([["ffffff"]*denominator for row in range (rows)])
+        #frame_copy = frame.copy()
+        #frame_list.append(frame_copy) 
+        
+        for i in range(0, mult):
+            # Decide color
+            result = divmod(i, len(list(color_dict)))
+            
+            start_grid = numerator * i
+            end_grid = numerator * (i+1)
+            
+            
+            frame_reshape = np.reshape(frame, (1, rows*denominator))
+            im_fill(frame_reshape, [0, 0], [start_grid, end_grid-1], list(color_dict.values())[result[1]])
+
+            frame = np.reshape(frame_reshape, (rows, denominator))
+            frame_copy = frame.copy()
+            frame_list.append(frame_copy) 
+  
+            
+        play_video= vid_show(frame_list, numerator*mult, 1) # play on screen
+
+        return play_video
+
+    
+def grid_lines_on(width, height, numerator):
+
+    fig1, ax = pyplot.subplots() # make figure 
     ax.grid(linestyle='-',linewidth=0.5)
-    #ax.grid(linestyle='-',which='both')
     xticks = np.arange(-0.5,height+0.5 ,1)
     yticks = np.arange(-0.5, width-0.5,1)
     
-    #yticks = np.arange(0, 1, 1)
 
     ax.set_xticks(xticks)
     x_middle_labels = [(str(y)+'/'+str(height)) for y in np.arange(1, height)]
@@ -309,7 +425,6 @@ def vid_show(vid,numerator,fps):    #previously aolme_vidshow
   
   '''
     matrixf = make_rgb(vid[0]) 
-    #print(matrixf.shape[0], matrixf.shape[1])
     if not grid_lines:
         fig = pyplot.figure(2)
         pyplot.tick_params(axis='both', which='both', bottom='off', top='off', labelbottom='off', right='off', left='off', labelleft='off')
