@@ -140,24 +140,37 @@ def grid_lines_on(width, height, numerator):
     fig1, ax = pyplot.subplots() # make figure 
     ax.grid(linestyle='-',linewidth=1)
     xticks = np.arange(-0.5,height+0.5 ,1)
+    
     yticks = np.arange(-0.5, width-0.5,1)
     
 
     ax.set_xticks(xticks)
     x_middle_labels = [(str(y)+'/'+str(height)) for y in np.arange(1, height)]
-    x_labels = [0]
+    x_labels = [' ']
     x_labels.extend(x_middle_labels)
     x_labels.append(1)
     ax.set_xticklabels(x_labels)
     
     
     ax.set_yticks(yticks)
-    ax.set_yticklabels([int(x+0.5) for x in yticks])
+    
+    y_middle_labels = [int(x) for x in np.arange(1, width)]
+    y_labels = [' ']
+    y_labels.extend(y_middle_labels)
+   
+    
+    ax.set_yticklabels(y_labels)
+
+    #ax.set_yticklabels([int(x+0.5) for x in yticks])
     
     ax.tick_params(axis='y', which='both', labelleft='on', labelright='on')
+    ax.tick_params(axis='x', which='both', labelbottom='off', labeltop='on')
     
     # Adding title
-    ax.title.set_text(str(numerator)+'/'+str(height))
+    
+    #ax.title.set_text('Fraction: ' + str(numerator)+'/'+str(height))
+    ax.set_title('Fraction: ' + str(numerator)+'/'+str(height), fontsize = 15)
+
     return fig1,ax
 
 def check_input(img,which_lib):
