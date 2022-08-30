@@ -50,16 +50,20 @@ def FracDiv(numerator_1, denominator_1,
     return
 
 
-def Frac(numerator, denominator):
+def Frac(numerator, denominator, aspect = 'None'):
+    
     if denominator == 0:
         print("Error: The denominator cannot be zero!")
         return 
     
+    if aspect == 'None':
+        aspect = 0.1*denominator
+        
     if numerator == 0:
         # Create a frame with white background color
         frame = np.array([["ffffff"]*denominator for row in range (1)])
         # Video play
-        play_video= vid_show([frame], numerator, 1) # play on screen
+        play_video= vid_show([frame], numerator, 1, aspect) # play on screen
         return play_video
     
     re = divmod(numerator, denominator)
@@ -86,12 +90,14 @@ def Frac(numerator, denominator):
    
     
     # Video play
-    play_video= vid_show([frame], numerator, 1) # play on screen
+    play_video= vid_show([frame], numerator, 1, aspect) # play on screen
     
     return play_video
 
 
-def FracMultColors(numerator, denominator, mult):
+def FracMultColors(numerator, denominator, mult, aspect = 'None'):
+    if aspect == 'None':
+        aspect = 0.1*denominator
     
     if numerator == 0 or denominator == 0 or mult == 0 or mult == 1:
         return Frac(numerator*mult, denominator)
@@ -130,7 +136,7 @@ def FracMultColors(numerator, denominator, mult):
             frame_list.append(frame_copy) 
   
             
-        play_video= vid_show(frame_list, numerator*mult, 1) # play on screen
+        play_video= vid_show(frame_list, numerator*mult, 1, aspect) # play on screen
 
         return play_video
 
@@ -163,8 +169,10 @@ def grid_lines_on(width, height, numerator):
 
     #ax.set_yticklabels([int(x+0.5) for x in yticks])
     
-    ax.tick_params(axis='y', which='both', labelleft='on', labelright='on')
-    ax.tick_params(axis='x', which='both', labelbottom='off', labeltop='on')
+    ax.yaxis.tick_right()
+    ax.xaxis.tick_top()
+    #ax.tick_params(axis='y', which='both', labelleft='off', labelright='on')
+    #ax.tick_params(axis='x', which='both', labelbottom='off', labeltop='on')
     
     # Adding title
     
@@ -422,7 +430,7 @@ def  im_print(matrix): #previously aolme_imprint
 
     return None;
     
-def vid_show(vid,numerator,fps):    #previously aolme_vidshow
+def vid_show(vid,numerator,fps, asp = 'None'):    #previously aolme_vidshow
     '''
   A function that 'plays' a list of frame, creating a 2d video. Note, this must be set equal to some value to work!!!
   
@@ -451,7 +459,10 @@ def vid_show(vid,numerator,fps):    #previously aolme_vidshow
                 frame = frame[0:20,0:20]
                 vid[i]=frame
                 i+=1
-    im = pyplot.imshow(matrixf, interpolation='none', aspect='auto')
+    #im = pyplot.imshow(matrixf, interpolation='none', aspect='auto')
+    if asp == 'None':
+        asp = 0.1*matrixf.shape[1]
+    im = pyplot.imshow(matrixf, interpolation='none', aspect=asp)
         
     # function to update figure
     def update_fig(j):
