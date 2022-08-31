@@ -429,59 +429,6 @@ def im_print(matrix): #previously aolme_imprint
 
     return None;
     
-def vid_show_ori(vid,numerator, fps, comment = ' ', asp = 'None'):    #previously aolme_vidshow
-    '''
-  A function that 'plays' a list of frame, creating a 2d video. Note, this must be set equal to some value to work!!!
-  
-  Inputs:
-  vid: A list of frames, set as [frame0,frame1,...,framen], where each frame is a nxn matrix of the same size.
-  fps: A number which represents the number of frames that should be played per second.
-  
-  Outputs:
-  A visual animation containing each frame in the order listed. Returns the animation.
-  
-  '''
-    matrixf = make_rgb(vid[0]) 
-    if not grid_lines:
-        fig = pyplot.figure(2)
-        pyplot.tick_params(axis='both', which='both', bottom='off', top='off', labelbottom='off', right='off', left='off', labelleft='off')
-    else:
-        fig1,ax = grid_lines_on(matrixf.shape[0],matrixf.shape[1], numerator,comment)
-    fps = 1000./fps  
-    if len(vid) < 1:
-        print ("Incorrect input, make sure you give function a video to play!")
-        
-    if matrixf.shape[0]*matrixf.shape[1]>400:
-            print ("Image too large!! Shrinking...")
-            i = 0
-            for frame in vid:
-                frame = frame[0:20,0:20]
-                vid[i]=frame
-                i+=1
-    #im = pyplot.imshow(matrixf, interpolation='none', aspect='auto')
-    if asp == 'None':
-        asp = 0.1*matrixf.shape[1]
-    im = pyplot.imshow(matrixf, interpolation='none', aspect=asp)
-        
-    # function to update figure
-    def update_fig(j):
-        # set the data in the axesimage object
-        frame = make_rgb(vid[j])
-        im.set_array(frame)
-        pyplot.draw()
-        return im,
-    # kick off the animation
-    if (grid_lines):
-        ani = animation.FuncAnimation(fig1, update_fig, frames=range(len(vid)), 
-                                interval=fps, blit=False, repeat=True)
-    else:
-        ani = animation.FuncAnimation(fig, update_fig, frames=range(len(vid)),
-                                interval = fps, blit=True, repeat=True)
-    pyplot.tight_layout()
-    pyplot.show()
-	
-    return ani
-
 
 def vid_show(vid,numerator, fps, comment = ' ', asp = 'None'):    #previously aolme_vidshow
     '''
@@ -536,6 +483,7 @@ def vid_show(vid,numerator, fps, comment = ' ', asp = 'None'):    #previously ao
 	
     return ani
 	
+
 def save_vid(vid,fps,name):
     if os.name != 'nt':
         vid.save(name,fps = fps, writer='imagemagick')
