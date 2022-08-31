@@ -463,7 +463,7 @@ def vid_show(vid,numerator, fps, comment = ' ', asp = 'None'):    #previously ao
     if asp == 'None':
         asp = 0.1*matrixf.shape[1]
     im = pyplot.imshow(matrixf, interpolation='none', aspect=asp)
-        
+    pyplot.show() 
     # function to update figure
     def update_fig(j):
         # set the data in the axesimage object
