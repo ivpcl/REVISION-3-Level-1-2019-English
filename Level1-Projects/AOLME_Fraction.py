@@ -50,8 +50,8 @@ def FracDiv(numerator_1, denominator_1,
     return
 
 
-def Frac(numerator, denominator, aspect = 'None', fps = 1):
-    
+def Frac(numerator, denominator, aspect = 'None', fps = 1, comment = ' '):
+    print('comment_Frac = ', comment)
     if denominator == 0:
         print("Error: The denominator cannot be zero!")
         return 
@@ -63,7 +63,7 @@ def Frac(numerator, denominator, aspect = 'None', fps = 1):
         # Create a frame with white background color
         frame = np.array([["ffffff"]*denominator for row in range (1)])
         # Video play
-        play_video= vid_show([frame], numerator, fps, aspect) # play on screen
+        play_video= vid_show([frame], numerator, fps, comment, aspect) # play on screen
         return play_video
     
     re = divmod(numerator, denominator)
@@ -90,7 +90,7 @@ def Frac(numerator, denominator, aspect = 'None', fps = 1):
    
     
     # Video play
-    play_video= vid_show([frame], numerator, fps, aspect) # play on screen
+    play_video= vid_show([frame], numerator, fps, comment, aspect) # play on screen
     
     return play_video
 
@@ -136,12 +136,12 @@ def FracMultColors(numerator, denominator, mult, aspect = 'None', fps = 1):
             frame_list.append(frame_copy) 
   
             
-        play_video= vid_show(frame_list, numerator*mult, fps) # play on screen
+        play_video= vid_show(frame_list, numerator*mult, fps=fps, asp=aspect) # play on screen
 
         return play_video
 
     
-def grid_lines_on(width, height, numerator):
+def grid_lines_on(width, height, numerator, comment = ' '):
 
     fig1, ax = pyplot.subplots() # make figure 
     ax.grid(linestyle='-',linewidth=1)
@@ -165,10 +165,7 @@ def grid_lines_on(width, height, numerator):
     y_labels.extend(y_middle_labels)
    
     
-    ax.set_yticklabels(y_labels)
-
-    #ax.set_yticklabels([int(x+0.5) for x in yticks])
-    
+    ax.set_yticklabels(y_labels)    
     ax.yaxis.tick_right()
     ax.xaxis.tick_top()
     #ax.tick_params(axis='y', which='both', labelleft='off', labelright='on')
@@ -177,7 +174,10 @@ def grid_lines_on(width, height, numerator):
     # Adding title
     
     #ax.title.set_text('Fraction: ' + str(numerator)+'/'+str(height))
-    ax.set_title('Fraction: ' + str(numerator)+'/'+str(height), fontsize = 15)
+    if comment == ' ':
+        ax.set_title('Fraction: ' + str(numerator)+'/'+str(height), fontsize = 15)
+    else:
+        ax.set_title('Fraction: ' + str(numerator)+'/'+str(height)+'\n'+comment, fontsize = 15)
 
     return fig1,ax
 
@@ -430,7 +430,7 @@ def  im_print(matrix): #previously aolme_imprint
 
     return None;
     
-def vid_show(vid,numerator,fps, asp = 'None'):    #previously aolme_vidshow
+def vid_show(vid,numerator, fps, comment = ' ', asp = 'None'):    #previously aolme_vidshow
     '''
   A function that 'plays' a list of frame, creating a 2d video. Note, this must be set equal to some value to work!!!
   
@@ -442,12 +442,13 @@ def vid_show(vid,numerator,fps, asp = 'None'):    #previously aolme_vidshow
   A visual animation containing each frame in the order listed. Returns the animation.
   
   '''
+    print('comment_vid_show = ', comment)
     matrixf = make_rgb(vid[0]) 
     if not grid_lines:
         fig = pyplot.figure(2)
         pyplot.tick_params(axis='both', which='both', bottom='off', top='off', labelbottom='off', right='off', left='off', labelleft='off')
     else:
-        fig1,ax = grid_lines_on(matrixf.shape[0],matrixf.shape[1], numerator)
+        fig1,ax = grid_lines_on(matrixf.shape[0],matrixf.shape[1], numerator,comment)
     fps = 1000./fps  
     if len(vid) < 1:
         print ("Incorrect input, make sure you give function a video to play!")
