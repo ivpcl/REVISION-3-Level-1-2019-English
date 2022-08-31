@@ -50,7 +50,7 @@ def FracDiv(numerator_1, denominator_1,
     return
 
 
-def Frac(numerator, denominator, aspect = 'None'):
+def Frac(numerator, denominator, aspect = 'None', fps = 1):
     
     if denominator == 0:
         print("Error: The denominator cannot be zero!")
@@ -63,7 +63,7 @@ def Frac(numerator, denominator, aspect = 'None'):
         # Create a frame with white background color
         frame = np.array([["ffffff"]*denominator for row in range (1)])
         # Video play
-        play_video= vid_show([frame], numerator, 1, aspect) # play on screen
+        play_video= vid_show([frame], numerator, fps, aspect) # play on screen
         return play_video
     
     re = divmod(numerator, denominator)
@@ -90,12 +90,12 @@ def Frac(numerator, denominator, aspect = 'None'):
    
     
     # Video play
-    play_video= vid_show([frame], numerator, 1, aspect) # play on screen
+    play_video= vid_show([frame], numerator, fps, aspect) # play on screen
     
     return play_video
 
 
-def FracMultColors(numerator, denominator, mult, aspect = 'None'):
+def FracMultColors(numerator, denominator, mult, aspect = 'None', fps = 1):
     if aspect == 'None':
         aspect = 0.1*denominator
     
@@ -136,7 +136,7 @@ def FracMultColors(numerator, denominator, mult, aspect = 'None'):
             frame_list.append(frame_copy) 
   
             
-        play_video= vid_show(frame_list, numerator*mult, 1, aspect) # play on screen
+        play_video= vid_show(frame_list, numerator*mult, fps) # play on screen
 
         return play_video
 
