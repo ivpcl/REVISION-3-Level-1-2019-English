@@ -91,7 +91,8 @@ def Frac(numerator, denominator, aspect = 'None', fps = 1, comment = ' '):
     # Video play
     play_video= vid_show([frame], numerator, fps, comment, aspect) # play on screen
     
-    return play_video
+    #return play_video
+    return frame
 
 
 def FracMultColors(numerator, denominator, mult, aspect = 'None', fps = 1):
@@ -177,6 +178,45 @@ def grid_lines_on(width, height, numerator, comment = ' '):
         ax.set_title('Fraction: ' + str(numerator)+'/'+str(height), fontsize = 15)
     else:
         ax.set_title('Fraction: ' + str(numerator)+'/'+str(height)+'\n'+comment, fontsize = 15)
+
+    return fig1,ax
+
+
+def grid_lines_on_procedure(width, height, comment = ' '):
+
+    fig1, ax = pyplot.subplots() # make figure 
+    ax.grid(linestyle='-',linewidth=1)
+    xticks = np.arange(-0.5,height+0.5 ,1)
+    
+    yticks = np.arange(-0.5, width-0.5,1)
+    
+
+    ax.set_xticks(xticks)
+    x_middle_labels = [(str(y)+'/'+str(height)) for y in np.arange(1, height)]
+    x_labels = [' ']
+    x_labels.extend(x_middle_labels)
+    x_labels.append(1)
+    ax.set_xticklabels(x_labels)
+    
+    
+    ax.set_yticks(yticks)
+    
+    y_middle_labels = [int(x) for x in np.arange(1, width)]
+    y_labels = [' ']
+    y_labels.extend(y_middle_labels)
+   
+    
+    ax.set_yticklabels(y_labels)    
+    ax.yaxis.tick_right()
+    ax.xaxis.tick_top()
+    #ax.tick_params(axis='y', which='both', labelleft='off', labelright='on')
+    #ax.tick_params(axis='x', which='both', labelbottom='off', labeltop='on')
+    
+    # Adding title
+    
+    #ax.title.set_text('Fraction: ' + str(numerator)+'/'+str(height))
+    if comment != ' ':
+        ax.set_title(comment, fontsize = 15)
 
     return fig1,ax
 
@@ -484,6 +524,58 @@ def vid_show(vid,numerator, fps, comment = ' ', asp = 'None'):    #previously ao
     return ani
 	
 
+def vid_show_procedure(vid, fps, comment = ' ', asp = 'None'):    #previously aolme_vidshow
+    '''
+    A function that 'plays' a list of frame, creating a 2d video. Note, this must be set equal to some value to work!!!
+    
+    Inputs:
+    vid: A list of frames, set as [frame0,frame1,...,framen], where each frame is a nxn matrix of the same size.
+    fps: A number which represents the number of frames that should be played per second.
+    
+    Outputs:
+    A visual animation containing each frame in the order listed. Returns the animation.
+    
+    '''
+    matrixf = make_rgb(vid[-1]) 
+    if not grid_lines:
+        fig = pyplot.figure(2)
+        pyplot.tick_params(axis='both', which='both', bottom='off', top='off', labelbottom='off', right='off', left='off', labelleft='off')
+    else:
+        fig1,ax = grid_lines_on_procedure(matrixf.shape[0],matrixf.shape[1], comment)
+    fps = 1000./fps  
+    if len(vid) < 1:
+        print ("Incorrect input, make sure you give function a video to play!")
+        
+    if matrixf.shape[0]*matrixf.shape[1]>400:
+            print ("Image too large!! Shrinking...")
+            i = 0
+            for frame in vid:
+                frame = frame[0:20,0:20]
+                vid[i]=frame
+                i+=1
+    #im = pyplot.imshow(matrixf, interpolation='none', aspect='auto')
+    if asp == 'None':
+        asp = 0.1*matrixf.shape[1]
+    im = pyplot.imshow(matrixf, interpolation='none', aspect=asp)
+    pyplot.show() 
+    # function to update figure
+    def update_fig(j):
+        # set the data in the axesimage object
+        frame = make_rgb(vid[j])
+        im.set_array(frame)
+        pyplot.draw()        
+        return im
+    # kick off the animation
+    if (grid_lines):
+        ani = animation.FuncAnimation(fig1, update_fig, frames=range(len(vid)), 
+                                interval=fps, blit=False, repeat=True)
+    else:
+        ani = animation.FuncAnimation(fig, update_fig, frames=range(len(vid)),
+                                interval = fps, blit=True, repeat=True)
+    pyplot.tight_layout()
+    pyplot.show()
+	
+    return ani
 def save_vid(vid,fps,name):
     if os.name != 'nt':
         vid.save(name,fps = fps, writer='imagemagick')
