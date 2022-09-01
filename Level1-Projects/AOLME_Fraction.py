@@ -89,10 +89,10 @@ def Frac(numerator, denominator, aspect = 'None', fps = 1, comment = ' '):
    
     
     # Video play
-    play_video= vid_show([frame], numerator, fps, comment, aspect) # play on screen
+    play_video, matrixf= vid_show([frame], numerator, fps, comment, aspect) # play on screen
     
     #return play_video
-    return frame
+    return matrixf
 
 
 def FracMultColors(numerator, denominator, mult, aspect = 'None', fps = 1):
@@ -521,7 +521,7 @@ def vid_show(vid,numerator, fps, comment = ' ', asp = 'None'):    #previously ao
     pyplot.tight_layout()
     pyplot.show()
 	
-    return ani
+    return ani, matrixf
 	
 
 def vid_show_procedure(vid, fps, comment = ' ', asp = 'None'):    #previously aolme_vidshow
@@ -536,42 +536,39 @@ def vid_show_procedure(vid, fps, comment = ' ', asp = 'None'):    #previously ao
     A visual animation containing each frame in the order listed. Returns the animation.
     
     '''
-    matrixf = make_rgb(vid[-1]) 
-    if not grid_lines:
-        fig = pyplot.figure(2)
-        pyplot.tick_params(axis='both', which='both', bottom='off', top='off', labelbottom='off', right='off', left='off', labelleft='off')
-    else:
-        fig1,ax = grid_lines_on_procedure(matrixf.shape[0],matrixf.shape[1], comment)
-    fps = 1000./fps  
-    if len(vid) < 1:
-        print ("Incorrect input, make sure you give function a video to play!")
+    fps1 = 1000./fps  
+    # function to update figure
+    def update_fig(j):
+        # set the data in the axesimage object
+        matrixf = make_rgb(vid[j])
         
-    if matrixf.shape[0]*matrixf.shape[1]>400:
+        fig1,ax = grid_lines_on_procedure(matrixf.shape[0],matrixf.shape[1], comment)
+        
+        if len(vid) < 1:
+            print ("Incorrect input, make sure you give function a video to play!")
+        
+        if matrixf.shape[0]*matrixf.shape[1]>400:
             print ("Image too large!! Shrinking...")
             i = 0
             for frame in vid:
                 frame = frame[0:20,0:20]
                 vid[i]=frame
                 i+=1
-    #im = pyplot.imshow(matrixf, interpolation='none', aspect='auto')
-    if asp == 'None':
-        asp = 0.1*matrixf.shape[1]
-    im = pyplot.imshow(matrixf, interpolation='none', aspect=asp)
-    pyplot.show() 
-    # function to update figure
-    def update_fig(j):
-        # set the data in the axesimage object
-        frame = make_rgb(vid[j])
-        im.set_array(frame)
+        #im = pyplot.imshow(matrixf, interpolation='none', aspect='auto')
+        if asp == 'None':
+            aspect = 0.1*matrixf.shape[1]
+        
+        im = pyplot.imshow(matrixf, interpolation='none', aspect=aspect)
+        pyplot.show() 
+        im.set_array(matrixf)
         pyplot.draw()        
-        return im
+        return fig1, im
     # kick off the animation
-    if (grid_lines):
-        ani = animation.FuncAnimation(fig1, update_fig, frames=range(len(vid)), 
-                                interval=fps, blit=False, repeat=True)
-    else:
-        ani = animation.FuncAnimation(fig, update_fig, frames=range(len(vid)),
-                                interval = fps, blit=True, repeat=True)
+    
+    ani = animation.FuncAnimation(update_fig, frames=range(len(vid)), 
+                                interval=fps1, blit=False, repeat=True)
+   
+    
     pyplot.tight_layout()
     pyplot.show()
 	
