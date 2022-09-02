@@ -95,10 +95,10 @@ def Frac(numerator, denominator, aspect = 'None', fps = 1, comment = ' '):
    
     
     # Video play
-    play_video, matrixf= vid_show([frame], numerator, fps, comment, aspect) # play on screen
+    play_video = vid_show([frame], numerator, fps, comment, aspect) # play on screen
     
     #return play_video
-    return
+    return play_video
 
 
 def plot_to_frame(frame, comment):
@@ -201,7 +201,7 @@ def FracMultColors(numerator, denominator, mult, aspect = 'None', fps = 1):
             frame_list.append(frame_copy) 
   
             
-        play_video, _= vid_show(frame_list, numerator*mult, fps=fps, asp=aspect) # play on screen
+        play_video = vid_show(frame_list, numerator*mult, fps=fps, asp=aspect) # play on screen
 
         return play_video
 
@@ -648,7 +648,7 @@ def vid_show(vid,numerator, fps, comment = ' ', asp = 'None'):    #previously ao
     pyplot.tight_layout()
     pyplot.show()
 	
-    return ani, matrixf
+    return ani
 	
 
 def vid_show_procedure(vid, fps, comment = ' ', asp = 'None'):    #previously aolme_vidshow
