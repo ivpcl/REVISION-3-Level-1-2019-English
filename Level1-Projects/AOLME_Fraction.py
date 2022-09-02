@@ -12,7 +12,8 @@ import matplotlib.pyplot as pyplot
 from matplotlib import animation as animation
 import numpy as np
 import re 
-
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_agg import FigureCanvasAgg
 from IPython.display import HTML
 from base64 import b64encode
 import os
@@ -99,6 +100,65 @@ def Frac(numerator, denominator, aspect = 'None', fps = 1, comment = ' '):
     #return play_video
     return matrixf
 
+
+def plot_to_frame(frame, comment):
+
+    fig,ax = grid_lines_on_procedure(frame.shape[0],frame.shape[1], comment = comment)
+    canvas = FigureCanvasAgg(fig)
+    #plt.tight_layout()
+    pyplot.imshow(frame, interpolation='none', aspect =0.1*frame.shape[1])
+    pyplot.show()
+    buf = canvas.buffer_rgba()
+    X = np.asarray(buf)  
+    X_new = X[:,:,0:3]
+    
+    return X_new
+
+
+def Frac_proc(numerator, denominator, aspect = 'None', fps = 1, comment = ' '):
+    if denominator == 0:
+        print("Error: The denominator cannot be zero!")
+        return 
+    
+    if aspect == 'None':
+        aspect = 0.1*denominator
+        
+    if numerator == 0:
+        # Create a frame with white background color
+        frame = np.array([["ffffff"]*denominator for row in range (1)])
+        # Video play
+        play_video= vid_show([frame], numerator, fps, comment, aspect) # play on screen
+        return play_video
+    
+    re = divmod(numerator, denominator)
+    quo = re[0]
+    rem = re[1]
+
+    if rem == 0:
+      rows = quo
+    else:
+      rows = quo + 1
+    
+    # Create a frame with white background color
+    frame = np.array([["ffffff"]*denominator for row in range (rows)])
+     
+    if numerator<denominator:     
+        # Fill the vector
+        im_fill(frame, [0, 0], [0, numerator-1], color_dict.get("red"))
+    else:
+        im_fill(frame, [0, quo-1], [0, denominator-1], color_dict.get("red"))
+
+        if rem != 0:
+            im_fill(frame, [rows-1, rows-1], [0, rem-1], color_dict.get("red"))
+
+   
+    
+    # Video play
+    #play_video, matrixf= vid_show([frame], numerator, fps, comment, aspect) # play on screen
+    matrixf = make_rgb(frame) 
+    Frame = plot_to_frame(matrixf, comment)
+    #return play_video
+    return Frame
 
 def FracMultColors(numerator, denominator, mult, aspect = 'None', fps = 1):
     if aspect == 'None':
@@ -224,6 +284,68 @@ def grid_lines_on_procedure(width, height, comment = ' '):
         ax.set_title(comment, fontsize = 15)
 
     return fig1,ax
+
+
+def padding(frame, video, h_video, w_video):
+    old_h, old_w, channels = frame.shape
+    if divmod(h_video - old_h, 2)[1] != 0:
+      pad_h_t = int((h_video - 1 - old_h) /2)
+      pad_h_b = int((h_video + 1 - old_h) /2)
+
+    else:
+      pad_h_t = int((h_video - old_h) /2)
+      pad_h_b = int((h_video - old_h) /2)
+
+    if divmod(w_video - old_w, 2)[1] != 0:
+      pad_w_l = int((w_video - 1 - old_w) /2)
+      pad_w_r = int((w_video + 1 - old_w) /2)
+
+    else:
+      pad_w_l = int((w_video - old_w) /2)
+      pad_w_r = int((w_video - old_w) /2)
+
+    padding_image = cv2.copyMakeBorder(frame, 
+                                       pad_h_t, pad_h_b,
+                                       pad_w_l, pad_w_r,
+                                       cv2.BORDER_CONSTANT, 
+                                       None, 
+                                       value = [255, 255, 255])
+    
+    new_h, new_w, channels = padding_image.shape
+    #plt.imshow(padding_image)
+    #plt.show()
+    padding_image = cv2.cvtColor(padding_image, cv2.COLOR_BGR2RGB)
+    video.write(padding_image)
+    return video
+
+
+def create_proce_video(frame_list, video_name, fps):
+    height_list = []
+    width_list = []
+
+    for frame in frame_list:
+        height, width = frame.shape[0:2]
+        height_list.append(height)
+        width_list.append(width)
+    
+    h_video=np.max(height_list)
+    w_video=np.max(width_list)
+    
+    
+    #fourcc = cv2.VideoWriter_fourcc('X', 'V', 'I', 'D')
+    video = cv2.VideoWriter(video_name, 
+                            cv2.VideoWriter_fourcc(*'MJPG'), 
+                            fps, 
+                            (w_video, h_video))
+    
+    for frame in frame_list:
+        video =  padding(frame, video, h_video, w_video)
+    
+    video.release()
+
+    return video
+        
+
 
 def check_input(img,which_lib):
     if img is None:
