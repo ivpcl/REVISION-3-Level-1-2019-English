@@ -98,7 +98,7 @@ def Frac(numerator, denominator, aspect = 'None', fps = 1, comment = ' '):
     play_video, matrixf= vid_show([frame], numerator, fps, comment, aspect) # play on screen
     
     #return play_video
-    return matrixf
+    return
 
 
 def plot_to_frame(frame, comment):
