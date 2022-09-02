@@ -13,6 +13,11 @@ from matplotlib import animation as animation
 import numpy as np
 import re 
 
+from IPython.display import HTML
+from base64 import b64encode
+import os
+
+
 grid_lines = True
 SAFE = True 
 easy_messages = None #if you don't want traceback turn this on
@@ -968,3 +973,24 @@ def print_vid_segment(vid,ranges,frames,fps):
         vid_seg.append(vids[ranges[0]:ranges[1],ranges[2]:ranges[3]])
     vid_seg = vid_seg[frames[0]:frames[1]]
     return vid_show(vid_seg,fps)
+
+
+def display_video(save_path):
+    # Input video path
+    # save_path = "video.mp4"
+    
+    # Compressed video path
+    compressed_path = "video_compressed.mp4"
+    
+    os.system(f"ffmpeg -i {save_path} -vcodec libx264 {compressed_path}")
+    
+    # Show video
+    mp4 = open(compressed_path,'rb').read()
+    data_url = "data:video/mp4;base64," + b64encode(mp4).decode()
+    HTML("""
+    <video width=400 controls loop autoplay>
+          <source src="%s" type="video/mp4">
+    </video>
+    """ % data_url)
+    return
+
