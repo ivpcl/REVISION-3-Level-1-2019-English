@@ -136,7 +136,7 @@ def FracMultColors(numerator, denominator, mult, aspect = 'None', fps = 1):
             frame_list.append(frame_copy) 
   
             
-        play_video= vid_show(frame_list, numerator*mult, fps=fps, asp=aspect) # play on screen
+        play_video, _= vid_show(frame_list, numerator*mult, fps=fps, asp=aspect) # play on screen
 
         return play_video
 
