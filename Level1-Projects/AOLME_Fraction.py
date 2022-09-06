@@ -237,13 +237,18 @@ def grid_lines_on(width, height, numerator, comment = ' '):
     #ax.tick_params(axis='x', which='both', labelbottom='off', labeltop='on')
     
     # Adding title
+    if comment != ' ':
+        ax.set_title(comment, fontsize = 15)
+
     
     #ax.title.set_text('Fraction: ' + str(numerator)+'/'+str(height))
-    if comment == ' ':
-        ax.set_title('Fraction: ' + str(numerator)+'/'+str(height), fontsize = 15)
-    else:
-        ax.set_title('Fraction: ' + str(numerator)+'/'+str(height)+'\n'+comment, fontsize = 15)
-
+# =============================================================================
+#     if comment == ' ':
+#         ax.set_title('Fraction: ' + str(numerator)+'/'+str(height), fontsize = 15)
+#     else:
+#         ax.set_title('Fraction: ' + str(numerator)+'/'+str(height)+'\n'+comment, fontsize = 15)
+# 
+# =============================================================================
     return fig1,ax
 
 
@@ -312,8 +317,8 @@ def padding(frame, video, h_video, w_video):
                                        value = [255, 255, 255])
     
     new_h, new_w, channels = padding_image.shape
-    #plt.imshow(padding_image)
-    #plt.show()
+    pyplot.imshow(padding_image)
+    pyplot.show()
     padding_image = cv2.cvtColor(padding_image, cv2.COLOR_BGR2RGB)
     video.write(padding_image)
     return video
