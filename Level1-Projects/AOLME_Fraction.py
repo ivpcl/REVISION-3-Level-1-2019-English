@@ -108,7 +108,7 @@ def plot_to_frame(frame, comment):
     #plt.tight_layout()
     pyplot.imshow(frame, interpolation='none', aspect =0.1*frame.shape[1])
     pyplot.show()
-    #fig.savefig('plot.jpg')
+    fig.savefig('plot.jpg')
     buf = canvas.buffer_rgba()
     X = np.asarray(buf)  
     X_new = X[:,:,0:3]
@@ -318,14 +318,6 @@ def padding(frame, video, h_video, w_video):
                                        value = [255, 255, 255])
     
     new_h, new_w, channels = padding_image.shape
-# =============================================================================
-#     cv2.imwrite('ori_image.jpg', frame)
-#     cv2.imwrite('padding_image.jpg', padding_image)
-#     pyplot.imshow(frame)
-#     pyplot.show()
-#     pyplot.imshow(padding_image)
-#     pyplot.show()
-# =============================================================================
     padding_image = cv2.cvtColor(padding_image, cv2.COLOR_BGR2RGB)
     video.write(padding_image)
     return video
