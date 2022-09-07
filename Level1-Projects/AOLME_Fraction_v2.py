@@ -196,7 +196,7 @@ class Fraction():
             height_list.append(height)
             width_list.append(width)
         
-        print(height_list)
+        #print(height_list)
         h_video=np.max(height_list)
         w_video=np.max(width_list)
         
@@ -213,7 +213,7 @@ class Fraction():
         
         video.release()
     
-        return video
+        return
         
         
         
