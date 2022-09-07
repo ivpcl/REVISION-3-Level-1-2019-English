@@ -30,8 +30,8 @@ grid_lines = True
 
 class Fraction():
     def __init__(self):
-        self.numerator_list   = []
-        self.denominator_list = []
+        #self.numerator_list   = []
+        #self.denominator_list = []
         self.frame_list = []
         self.comment_list = []
         self.frame_array_list = []
@@ -42,6 +42,7 @@ class Fraction():
                            "yellow":"ffff00",
                            "cyan":"00ffff",
                            "magenta":"ff00ff"}
+        
         
     def AddFrac(self, numerator, 
                 denominator, 
@@ -85,8 +86,8 @@ class Fraction():
                     im_fill(frame, [rows-1, rows-1], [0, rem-1], self.color_dict.get("red"))
     
        
-        self.numerator_list.append(numerator)
-        self.denominator_list.append(denominator)
+        #self.numerator_list.append(numerator)
+        #self.denominator_list.append(denominator)
         # Video play
         #play_video, matrixf= vid_show([frame], numerator, fps, comment, aspect) # play on screen
         frame_rgb = make_rgb(frame) 
@@ -95,14 +96,63 @@ class Fraction():
         self.comment_list.append(comment)
         #Frame = plot_to_frame(matrixf, comment)
         #return play_video
-        return frame_rgb
+        return 
     
     
-    def plot_to_frame(self):
-        #max_num = max(self.numerator_list)
-        #max_denom = max(self.denominator_list)
+    def AddMult(self, numerator,
+                denominator,
+                mult, 
+                aspect = 'None',
+                comment = ' '):
         
+        if aspect == 'None':
+            aspect = 0.1*denominator
+        
+        if numerator == 0 or denominator == 0 or mult == 0 or mult == 1:
+            return self.AddFrac(numerator*mult, denominator, comment)
+        
+        else:
+          
+            # Decide number of rows
+            re = divmod(numerator*mult, denominator)
+            quo = re[0]
+            rem = re[1]
+          
+            if rem == 0:
+              rows = quo
+            else:
+              rows = quo + 1
+          
+            # Create a frame with white background color
+            frame = np.array([["ffffff"]*denominator for row in range (rows)])
+            #frame_copy = frame.copy()
+            #frame_list.append(frame_copy) 
+            
+            for i in range(0, mult):
+                # Decide color
+                result = divmod(i, len(list(self.color_dict)))
+                
+                start_grid = numerator * i
+                end_grid = numerator * (i+1)
+                
+                
+                frame_reshape = np.reshape(frame, (1, rows*denominator))
+                im_fill(frame_reshape, [0, 0], [start_grid, end_grid-1], list(self.color_dict.values())[result[1]])
+    
+                frame = np.reshape(frame_reshape, (rows, denominator))
+                frame_copy = frame.copy()
+                frame_rgb = make_rgb(frame_copy) 
+        
+                self.frame_list.append(frame_rgb)
+                self.comment_list.append(comment)
+                #frame_list.append(frame_copy) 
+      
+            return 
+        
+        
+    def plot_to_frame(self):
        
+        
         for index, frame in enumerate(self.frame_list):
             fig,ax = self.grid_lines_on_procedure(frame.shape[0],
                                                   frame.shape[1], 
@@ -214,8 +264,8 @@ class Fraction():
         video.release()
     
         return
-        
-        
+
+    
         
   
 
