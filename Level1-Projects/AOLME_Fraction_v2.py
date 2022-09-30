@@ -25,6 +25,7 @@ from IPython.display import HTML
 from base64 import b64encode
 import os
 import matplotlib.pyplot as plt
+from google.colab.patches import cv2_imshow
 
 
 SAFE = True 
@@ -289,9 +290,9 @@ class Fraction():
 
     def compare_two_fracs(self, frac1, frac2):
         im_v = cv2.vconcat([frac1, frac2])
-        plt.imshow(im_v)
-        plt.show()
-        return im_v
+        im_v_new = cv2.cvtColor(im_cv, cv2.COLOR_BGR2RGB)
+        cv2_imshow(im_v_new)
+        return im_v_new
     
         
   
