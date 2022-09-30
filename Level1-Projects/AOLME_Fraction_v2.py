@@ -24,6 +24,8 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg
 from IPython.display import HTML
 from base64 import b64encode
 import os
+import matplotlib.pyplot as plt
+
 
 SAFE = True 
 grid_lines = True
@@ -94,9 +96,10 @@ class Fraction():
         
         self.frame_list.append(frame_rgb)
         self.comment_list.append(comment)
+        frame_array = self.plot_to_frame_single(frame_rgb, comment)
         #Frame = plot_to_frame(matrixf, comment)
         #return play_video
-        return 
+        return frame_array
     
     
     def AddMult(self, numerator,
@@ -145,30 +148,49 @@ class Fraction():
         
                 self.frame_list.append(frame_rgb)
                 self.comment_list.append(comment)
+                
                 #frame_list.append(frame_copy) 
       
             return 
         
+    def plot_to_frame_single(self, frame, comment):
+        fig,ax = self.grid_lines_on_procedure(frame.shape[0],
+                                              frame.shape[1], 
+                                              comment = comment)
         
-    def plot_to_frame(self):
-       
+        canvas = FigureCanvasAgg(fig)
+        #plt.tight_layout()
+        pyplot.imshow(frame, interpolation='none', aspect =0.1*frame.shape[1])
+        pyplot.show()
+        fig.savefig('plot.jpg')
+        buf = canvas.buffer_rgba()
+        X = np.asarray(buf)  
+        X_new = X[:,:,0:3]
+        self.frame_array_list.append(X_new)
+        #print(X_new.shape)
+        return X_new
         
-        for index, frame in enumerate(self.frame_list):
-            fig,ax = self.grid_lines_on_procedure(frame.shape[0],
-                                                  frame.shape[1], 
-                                                  comment = self.comment_list[index])
-            canvas = FigureCanvasAgg(fig)
-            #plt.tight_layout()
-            pyplot.imshow(frame, interpolation='none', aspect =0.1*frame.shape[1])
-            pyplot.show()
-            fig.savefig('plot.jpg')
-            buf = canvas.buffer_rgba()
-            X = np.asarray(buf)  
-            X_new = X[:,:,0:3]
-            self.frame_array_list.append(X_new)
-
-        return 
-
+        
+    
+    
+# =============================================================================
+#     def plot_to_frame(self):      
+#         for index, frame in enumerate(self.frame_list):
+#             fig,ax = self.grid_lines_on_procedure(frame.shape[0],
+#                                                   frame.shape[1], 
+#                                                   comment = self.comment_list[index])
+#             canvas = FigureCanvasAgg(fig)
+#             #plt.tight_layout()
+#             pyplot.imshow(frame, interpolation='none', aspect =0.1*frame.shape[1])
+#             pyplot.show()
+#             fig.savefig('plot.jpg')
+#             buf = canvas.buffer_rgba()
+#             X = np.asarray(buf)  
+#             X_new = X[:,:,0:3]
+#             self.frame_array_list.append(X_new)
+#         return 
+# 
+# =============================================================================
 
     def grid_lines_on_procedure(self, width, height, comment = ' '):        
         fig, ax = pyplot.subplots() # make figure 
@@ -237,7 +259,7 @@ class Fraction():
 
 
     def CreateVideo(self, video_name, fps):
-        self.plot_to_frame()
+        #self.plot_to_frame()
         height_list = []
         width_list = []
     
@@ -265,6 +287,11 @@ class Fraction():
     
         return
 
+    def compare_two_fracs(self, frac1, frac2):
+        im_v = cv2.vconcat([frac1, frac2])
+        plt.imshow(im_v)
+        plt.show()
+        return im_v
     
         
   
@@ -1107,4 +1134,3 @@ def display_video(save_path):
     </video>
     """ % data_url)
     return
-
