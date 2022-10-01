@@ -293,7 +293,7 @@ class Fraction():
     def CreateCombVideo(self, video_name, fps):
     
         h_video, w_video = self.frame_array_list[0].shape[0:2]
-          
+        print('h, w = ', h_video, w_video)
         #fourcc = cv2.VideoWriter_fourcc('X', 'V', 'I', 'D')
         video = cv2.VideoWriter(video_name, 
                                 cv2.VideoWriter_fourcc(*'MJPG'), 
