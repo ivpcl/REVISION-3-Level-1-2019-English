@@ -38,6 +38,7 @@ class Fraction():
         self.frame_list = []
         self.comment_list = []
         self.frame_array_list = []
+        self.frame_comb_array_list = []
         self.white = "ffffff"
         self.color_dict = {"red":"ff0000",
                            "green":"00ff00",
@@ -288,10 +289,31 @@ class Fraction():
     
         return
 
+
+    def CreateCombVideo(self, video_name, fps):
+    
+        h_video, w_video = self.frame_array_list[0].shape[0:2]
+          
+        #fourcc = cv2.VideoWriter_fourcc('X', 'V', 'I', 'D')
+        video = cv2.VideoWriter(video_name, 
+                                cv2.VideoWriter_fourcc(*'MJPG'), 
+                                fps, 
+                                (w_video, h_video))
+        
+        
+        for frame in self.frame_comb_array_list:
+            video.write(frame)
+        
+        video.release()
+    
+        return
+    
+    
     def compare_two_fracs(self, frac1, frac2):
         im_v = cv2.vconcat([frac1, frac2])
         im_v_new = cv2.cvtColor(im_v, cv2.COLOR_BGR2RGB)
         cv2_imshow(im_v_new)
+        self.frame_comb_array_list.append(im_v_new)
         return im_v_new
     
         
