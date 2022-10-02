@@ -309,7 +309,7 @@ class Fraction():
         return
     
     
-    def compare_two_fracs(self, frac1, frac2):
+    def combine_two_fracs(self, frac1, frac2):
         im_v = cv2.vconcat([frac1, frac2])
         im_v_new = cv2.cvtColor(im_v, cv2.COLOR_BGR2RGB)
         cv2_imshow(im_v_new)
