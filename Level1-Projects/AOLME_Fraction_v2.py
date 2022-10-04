@@ -147,10 +147,12 @@ class Fraction():
                 frame = np.reshape(frame_reshape, (rows, denominator))
                 frame_copy = frame.copy()
                 frame_rgb = make_rgb(frame_copy) 
-        
+                
+                #print('append frame')
+                #print(frame_rgb)
                 self.frame_list.append(frame_rgb)
                 self.comment_list.append(comment)
-                
+                self.plot_to_frame_single(frame_rgb, comment)
                 #frame_list.append(frame_copy) 
       
             return 
