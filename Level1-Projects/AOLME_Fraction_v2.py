@@ -288,6 +288,9 @@ class FrV():
             video =  self.padding(frame, video, h_video, w_video)
         
         video.release()
+        vid = MakeVideo(video_name)
+        HTML(vid.HTML_str)
+        
     
         return
 
