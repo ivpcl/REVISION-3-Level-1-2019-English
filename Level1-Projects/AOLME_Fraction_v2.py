@@ -262,6 +262,30 @@ class FrV():
         return video
 
 
+
+
+    def addTextFrame(self, text):
+        height, width = self.frame_array_list[-1].shape[0:2]
+        img = np.full((height, width, 3), 255, dtype = np.uint8)
+        
+        # setup text
+        font = cv2.FONT_HERSHEY_SIMPLEX
+
+        # get boundary of this text
+        textsize = cv2.getTextSize(text, font, 1, 2)[0]
+        
+        # get coords based on boundary
+        textX = int((img.shape[1] - textsize[0]) / 2)
+        textY = int((img.shape[0] + textsize[1]) / 2)
+        print(textX, textY)
+        # add text centered on image
+        cv2.putText(img, text, (textX, textY), font, 1, (0, 0, 0), 2)
+        
+        self.frame_array_list.append(img)
+        #cv2_imshow(img)
+        return img
+    
+    
     def CreateVideo(self, video_name, fps):
         #self.plot_to_frame()
         height_list = []
