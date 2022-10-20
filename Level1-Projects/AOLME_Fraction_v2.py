@@ -289,10 +289,9 @@ class FrV():
         
         video.release()
         vid = MakeVideo(video_name)
-        HTML(vid.HTML_str)
-        
     
-        return
+    
+        return vid.HTML_str
 
 
     def CreateCombVideo(self, video_name, fps):
@@ -311,9 +310,8 @@ class FrV():
         
         video.release()
         vid = MakeVideo(video_name)
-        HTML(vid.HTML_str)
         
-        return
+        return vid.HTML_str
     
     
     def combine_two_fracs(self, frac1, frac2):
