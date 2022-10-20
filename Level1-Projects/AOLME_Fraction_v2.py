@@ -277,7 +277,7 @@ class FrV():
         # get coords based on boundary
         textX = int((img.shape[1] - textsize[0]) / 2)
         textY = int((img.shape[0] + textsize[1]) / 2)
-        print(textX, textY)
+        #print(textX, textY)
         # add text centered on image
         cv2.putText(img, text, (textX, textY), font, 1, (0, 0, 0), 2)
         
