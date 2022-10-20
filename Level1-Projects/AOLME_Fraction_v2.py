@@ -31,7 +31,7 @@ from google.colab.patches import cv2_imshow
 SAFE = True 
 grid_lines = True
 
-class Fraction():
+class FrV():
     def __init__(self):
         #self.numerator_list   = []
         #self.denominator_list = []
@@ -307,7 +307,9 @@ class Fraction():
             video.write(frame)
         
         video.release()
-    
+        vid = MakeVideo(video_name)
+        HTML(vid.HTML_str)
+        
         return
     
     
@@ -319,7 +321,43 @@ class Fraction():
         return im_v_new
     
         
+
+class MakeVideo:
+  def __init__(self, mp4_fname):
+    """ compresses the video file and displays in Jupyter notebook.
+        mp4_fname represents the filename of the mp4 video.
+    """
+    self.mp4_fname = mp4_fname
+
+    # Compress file
+    temp_file = "temp_video.mp4"  
+    self.compress(temp_file)
+
+    # Create HTML for video display
+    self.HTML_vid(temp_file)
+
+  def compress(self, compressed_fname):
+    """ compresses the given video file to compressed_finame
+        If the filename is found, it replaces it with the current filename.
+    """
+    # Remove the compressed file name:
+    if os.path.exists(compressed_fname):
+      os.remove(compressed_fname)
+
+    # Use ffmpeg to compress
+    mp4_str = f"ffmpeg -i {self.mp4_fname} -vcodec libx264 {compressed_fname}"
+    os.system(mp4_str)
+    print("Compressed "+ self.mp4_fname + " into " + compressed_fname)
   
+  def HTML_vid(self, compressed_fname):
+    """ displays the compressed file in Juyter notebook.
+    """ 
+    mp4 = open(compressed_fname,'rb').read()
+    data_url = "data:video/mp4;base64," + b64encode(mp4).decode()
+    self.HTML_str = """
+                 <video width=500 controls loop autoplay>
+                    <source src="%s" type="video/mp4">
+                 </video> """ % data_url            
 
 
 
