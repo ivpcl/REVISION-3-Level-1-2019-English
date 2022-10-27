@@ -26,7 +26,9 @@ from base64 import b64encode
 import os
 import matplotlib.pyplot as plt
 from google.colab.patches import cv2_imshow
-
+from PIL import Image, ImageDraw, ImageFont
+from random import randint
+from matplotlib import cm
 
 SAFE = True 
 grid_lines = True
@@ -264,7 +266,7 @@ class FrV():
 
 
 
-    def addTextFrame(self, text):
+    def addTextFrame_v1(self, text):
         height, width = self.frame_array_list[-1].shape[0:2]
         img = np.full((height, width, 3), 255, dtype = np.uint8)
         
@@ -285,7 +287,97 @@ class FrV():
         #cv2_imshow(img)
         return img
     
+    def text_wrap(self, text, font, max_width):
+        """Wrap text base on specified width. 
+        This is to enable text of width more than the image width to be display
+        nicely.
+        @params:
+            text: str
+                text to wrap
+            font: obj
+                font of the text
+            max_width: int
+                width to split the text with
+        @return
+            lines: list[str]
+                list of sub-strings
+        """
+        lines = []
+        #textsize = cv2.getTextSize(text, font, 1, 2)[0]
+        # If the text width is smaller than the image width, then no need to split
+        # just add it to the line list and return
+        if font.getsize(text)[0]  <= max_width:
+            lines.append(text)
+            #print('too short')
+
+        else:
+            #print('too long')
+            #split the line by spaces to get words
+            words = text.split(' ')
+            i = 0
+            # append every word to a line while its width is shorter than the image width
+            while i < len(words):
+                line = ''
+                #textsize_v2 = cv2.getTextSize((line+words[i]), font, 1, 2)[0]
+                while i < len(words) and font.getsize(line + words[i])[0] <= max_width:
+                    line = line + words[i]+ " "
+                    i += 1
+                if not line:
+                    line = words[i]
+                    i += 1
+                lines.append(line)
+        return lines
     
+    
+    def addTextFrame(self, text = ' '):
+        height, width = self.frame_array_list[-1].shape[0:2]
+        #print(height, width)
+        img = np.full((height, width, 3), 255, dtype = np.uint8)
+        # Set x boundry
+        # Take 10% to the left for min and 50% to the left for max
+        x_min = (width  * 10) // 100
+        x_max = (width  * 50) // 100
+        # Randomly select x-axis
+        ran_x = x_min
+        #ran_x = randint(x_min, x_max)
+        
+        # Create font object with the font file and specify desired size
+        #font = cv2.FONT_HERSHEY_SIMPLEX
+        font_path = 'arialbd.ttf'
+        font = ImageFont.truetype(font=font_path, size=20)
+        lines = self.text_wrap(text, font, width -ran_x)
+        
+        #textsize = cv2.getTextSize('hg', font, 1, 2)[0]
+        #print(textsize)
+        #line_height = textsize[0]
+        line_height = font.getsize('hg')[1]
+        y_min = (height * 20) // 100   # 4% from the top
+        y_max = (height * 90) //100   # 90% to the bottom
+        #print(lines, line_height)
+        
+        y_max -= (len(lines)*line_height)  # Adjust
+        ran_y = y_min
+        #ran_y = randint(y_min, y_max)      # Generate random point
+        
+        #Create draw object
+        #draw = ImageDraw.Draw(img)
+        #Draw text on image
+        #color = 'rgb(0,0,0)'  # Red color
+        x = ran_x
+        y = ran_y
+        font = cv2.FONT_HERSHEY_SIMPLEX
+        for line in lines:
+          #print(line)
+          cv2.putText(img, line, (x, y), font, 0.5, (0, 0, 0), 1)
+          #draw.text((x,y), line, fill=color, font=font)
+          y = y + line_height    # update y-axis for new line
+        
+        self.frame_array_list.append(img)
+        cv2_imshow(img)
+        return img
+        
+
+
     def CreateVideo(self, video_name, fps):
         #self.plot_to_frame()
         height_list = []
