@@ -1,13 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Tue Sep  6 13:25:20 2022
-
-@author: sherry
-"""
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
 Created on Tue Aug 23 13:27:16 2022
 
 @author: sherry
@@ -263,7 +256,27 @@ class FrV():
         video.write(padding_image)
         return video
 
+    def insertImage(self, img_name):
+        height, width = self.frame_array_list[-1].shape[0:2]
+        img_ori = cv2.imread(img_name)
+        
 
+        h, w = img_ori.shape[0:2]
+        #print(h, w)
+        new_h = height
+        new_w = int(w*new_h/h)
+        
+        if new_w>width:
+            new_w = width
+            new_h = int(h*new_w/w)
+            
+        img = cv2.resize(img_ori, (new_w, new_h)) 
+        
+        cv2_imshow(img)
+        
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        self.frame_array_list.append(img)
+        return img
 
 
     def addTextFrame_v1(self, text):
