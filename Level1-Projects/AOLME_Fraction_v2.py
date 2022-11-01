@@ -343,7 +343,13 @@ class FrV():
     
     
     def addTextFrame(self, text = ' '):
-        height, width = self.frame_array_list[-1].shape[0:2]
+        
+        try:
+            height, width = self.frame_array_list[-1].shape[0:2]
+        
+        except:
+            height, width = 432, 288
+        
         #print(height, width)
         img = np.full((height, width, 3), 255, dtype = np.uint8)
         # Set x boundry
