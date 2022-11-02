@@ -300,62 +300,64 @@ class FrV():
         #cv2_imshow(img)
         return img
     
-    def text_wrap(self, text, font, max_width):
-        """Wrap text base on specified width. 
-        This is to enable text of width more than the image width to be display
-        nicely.
-        @params:
-            text: str
-                text to wrap
-            font: obj
-                font of the text
-            max_width: int
-                width to split the text with
-        @return
-            lines: list[str]
-                list of sub-strings
-        """
+    def text_wrap_v2(self, text, font, text_max_width):
+        
         lines = []
-        #textsize = cv2.getTextSize(text, font, 1, 2)[0]
-        # If the text width is smaller than the image width, then no need to split
-        # just add it to the line list and return
-        if font.getsize(text)[0]  <= max_width:
+        print('max_width =', text_max_width)
+        print('welcome length = ', font.getsize("welcome"))
+        if font.getsize(text)[0]  <= text_max_width:
             lines.append(text)
             #print('too short')
 
         else:
             #print('too long')
-            #split the line by spaces to get words
-            words = text.split(' ')
-            i = 0
+            words = text.split(' ')            
+            line = ''
             # append every word to a line while its width is shorter than the image width
-            while i < len(words):
-                line = ''
-                #textsize_v2 = cv2.getTextSize((line+words[i]), font, 1, 2)[0]
-                while i < len(words) and font.getsize(line + words[i])[0] <= max_width:
-                    line = line + words[i]+ " "
-                    i += 1
-                if not line:
-                    line = words[i]
-                    i += 1
-                lines.append(line)
+            for i in range(0, len(words)):  
+                # If less than one line without the space
+                if font.getsize(line + words[i])[0] <= text_max_width:
+                  # If more than one line with the space
+                  if font.getsize(line + words[i]+" ")[0]>text_max_width:
+                    print("over size = ", font.getsize(line + words[i]+" ")[0])
+                    line = line + words[i]
+                    print("append case 1: ", line)
+                    print("not over size = ", font.getsize(line)[0])
+                    lines.append(line)
+                  else:
+                    line = line + words[i] + " "
+                    print('case 2: ', line)
+                    print(font.getsize(line)[0])
+                else:
+                  lines.append(line) 
+                  line = words[i] + " "
+                  print('case 3: ', line)
+                  print(font.getsize(line)[0])
+                #print(line)
+                #print(font.getsize(line)[0])
+        lines.append(line) 
+        #print(lines)     
         return lines
     
     
-    def addTextFrame(self, text = ' '):
-        
+    def addTextFrame_v2(self, edge, text = ' '):         
         try:
             height, width = self.frame_array_list[-1].shape[0:2]
         
         except:
-            height, width = 432, 288
+            height, width = 288, 432
         
         #print(height, width)
         img = np.full((height, width, 3), 255, dtype = np.uint8)
         # Set x boundry
         # Take 10% to the left for min and 50% to the left for max
-        x_min = (width  * 10) // 100
-        x_max = (width  * 50) // 100
+# =============================================================================
+#         x_min = (width  * 10) // 100
+#         x_max = (width  * 50) // 100
+# =============================================================================
+        x_min = edge
+        x_max = width - edge
+        
         # Randomly select x-axis
         ran_x = x_min
         #ran_x = randint(x_min, x_max)
@@ -364,17 +366,26 @@ class FrV():
         #font = cv2.FONT_HERSHEY_SIMPLEX
         font_path = 'arialbd.ttf'
         font = ImageFont.truetype(font=font_path, size=20)
-        lines = self.text_wrap(text, font, width -ran_x)
+        #if '\n' in text:
+        #    text = text.split('\n')
+        #print('text = ', text)   
+        #print(x_max)
+        lines = self.text_wrap(text, font, width - edge*2)
+        
         
         #textsize = cv2.getTextSize('hg', font, 1, 2)[0]
         #print(textsize)
         #line_height = textsize[0]
         line_height = font.getsize('hg')[1]
-        y_min = (height * 20) // 100   # 4% from the top
-        y_max = (height * 90) //100   # 90% to the bottom
+# =============================================================================
+#         y_min = (height * 20) // 100   # 4% from the top
+#         y_max = (height * 90) //100   # 90% to the bottom
+# =============================================================================
+        y_min = edge
+        y_max = height - edge
         #print(lines, line_height)
         
-        y_max -= (len(lines)*line_height)  # Adjust
+        #y_max -= (len(lines)*line_height)  # Adjust
         ran_y = y_min
         #ran_y = randint(y_min, y_max)      # Generate random point
         
@@ -387,14 +398,107 @@ class FrV():
         font = cv2.FONT_HERSHEY_SIMPLEX
         for line in lines:
           #print(line)
-          cv2.putText(img, line, (x, y), font, 0.5, (0, 0, 0), 1)
+          cv2.putText(img, line, (x, y), font, 0.55, (0, 0, 0), 1)
           #draw.text((x,y), line, fill=color, font=font)
           y = y + line_height    # update y-axis for new line
         
         self.frame_array_list.append(img)
         cv2_imshow(img)
         return img
+    
+    def get_text_width(self, text, font, font_scale):
+        textSize = cv2.getTextSize(text, fontFace=font, fontScale=font_scale, thickness=1)
+        text_width = textSize[0][0]
+        return text_width
+
+    def get_text_height(self, text, font, font_scale):
+        textSize = cv2.getTextSize(text, fontFace=font, fontScale=font_scale, thickness=1)
+        text_height = textSize[0][1]
+        return text_height
+
+    def text_wrap(self, text, font, font_scale, text_max_width):
         
+        lines = []
+        text_ori_width = self.get_text_width(text, font, font_scale)
+        
+
+        if text_ori_width <= text_max_width:
+            lines.append(text)
+            #print('too short')
+
+        else:
+            #print('too long')
+            words = text.split(' ')            
+            line = ''
+            # append every word to a line while its width is shorter than the image width
+            for i in range(0, len(words)): 
+                text_new_width_no_space = self.get_text_width(line + words[i], 
+                                                        font, 
+                                                        font_scale)
+
+                # If less than one line without the space
+                if text_new_width_no_space <= text_max_width:
+                    text_new_width_with_space = self.get_text_width(line + words[i] +" ",
+                                                                font, 
+                                                                font_scale)
+
+                    # If more than one line with the space, SAVE
+                    if text_new_width_with_space>text_max_width:
+                        line = line + words[i]
+                        #lines.append(line)
+                    else:
+                        line = line + words[i] + " "
+                else:
+                  lines.append(line) 
+                  line = words[i] + " "
+                
+            lines.append(line) 
+        #print(lines)     
+        return lines
+    
+    
+    def addTextFrame(self, edge, text = ' '):         
+        try:
+            height, width = self.frame_array_list[-1].shape[0:2]
+        
+        except:
+            height, width = 288, 432
+        
+        #print(height, width)
+        img = np.full((height, width, 3), 255, dtype = np.uint8)
+        
+        x_edge, y_edge = edge, edge
+        text_max_width = width - edge*2
+
+        font = cv2.FONT_HERSHEY_SIMPLEX
+        font_scale = 0.5
+        font_thickness = 1
+        text_ori_height = self.get_text_height(text, font, font_scale)
+
+        lines = []
+        if '\n' in text:
+            new_text = text.split('\n ')  
+            for text in new_text:
+              all_lines = self.text_wrap(text, font, font_scale, text_max_width)
+              lines.extend(all_lines)
+                  
+        else:
+            lines = self.text_wrap(text, font, font_scale, text_max_width)
+        y = y_edge
+        
+           
+        for line in lines:
+          cv2.putText(img, 
+                      line, 
+                      (x_edge, y+text_ori_height), 
+                      font, 
+                      font_scale,
+                      (0, 0, 0),
+                      font_thickness)
+          y = y+text_ori_height*2
+        self.frame_array_list.append(img)
+        cv2_imshow(img)
+        return img
 
 
     def CreateVideo(self, video_name, fps):
@@ -1330,6 +1434,3 @@ def display_video(save_path):
     HTML("""
     <video width=400 controls loop autoplay>
           <source src="%s" type="video/mp4">
-    </video>
-    """ % data_url)
-    return
