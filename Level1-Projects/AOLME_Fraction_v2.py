@@ -1434,3 +1434,6 @@ def display_video(save_path):
     HTML("""
     <video width=400 controls loop autoplay>
           <source src="%s" type="video/mp4">
+    </video>
+    """ % data_url)
+    return
