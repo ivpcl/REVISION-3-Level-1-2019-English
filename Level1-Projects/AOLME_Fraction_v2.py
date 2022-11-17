@@ -457,7 +457,7 @@ class FrV():
         return lines
     
     
-    def addTextFrame(self, text_align, text = ' '):         
+    def addTextFrame(self, chars, text = ' '):         
         try:
             height, width = self.frame_array_list[-1].shape[0:2]
         
@@ -467,8 +467,8 @@ class FrV():
         #print(height, width)
         img = np.full((height, width, 3), 255, dtype = np.uint8)
         
-        x_edge, y_edge = text_align, text_align
-        text_max_width = width - text_align*2
+        x_edge, y_edge = chars, chars
+        text_max_width = width - chars*2
 
         font = cv2.FONT_HERSHEY_SIMPLEX
         font_scale = 0.5
