@@ -553,11 +553,16 @@ class FrV():
         return vid.HTML_str
     
     
-    def combine_two_fracs(self, frac1, frac2):
+    def combine_two_fracs(self, frac1, frac2, comment = ' '):
         im_v = cv2.vconcat([frac1, frac2])
+        im_v = cv2.putText(im_v, comment, (20, 20), cv2.FONT_HERSHEY_SIMPLEX, 
+                           0.5, (0,0,0), 1, cv2.LINE_AA)
+        self.frame_array_list.append(im_v)
         im_v_new = cv2.cvtColor(im_v, cv2.COLOR_BGR2RGB)
         cv2_imshow(im_v_new)
-        self.frame_comb_array_list.append(im_v_new)
+        
+        #self.frame_comb_array_list.append(im_v_new)
+        self.comment_list.append(comment)
         return im_v_new
     
         
