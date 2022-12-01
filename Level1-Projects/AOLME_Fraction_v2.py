@@ -457,7 +457,9 @@ class FrV():
         return lines
     
     
-    def addTextFrame(self, chars, text = ' '):         
+    def addTextFrame(self, text = ' ', chars = ' '):    
+        if chars == ' ':
+            chars = 20
         try:
             height, width = self.frame_array_list[-1].shape[0:2]
         
