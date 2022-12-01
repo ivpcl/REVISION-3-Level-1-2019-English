@@ -99,22 +99,22 @@ class FrV():
         return frame_array
     
     
-    def AddMult(self, numerator,
-                denominator,
+    def AddMult(self, num,
+                den,
                 mult, 
                 aspect = 'None',
                 comment = ' '):
         
         if aspect == 'None':
-            aspect = 0.1*denominator
+            aspect = 0.1*den
         
-        if numerator == 0 or denominator == 0 or mult == 0 or mult == 1:
-            return self.AddFrac(numerator*mult, denominator, comment)
+        if num == 0 or den == 0 or mult == 0 or mult == 1:
+            return self.AddFrac(num*mult, den, comment)
         
         else:
           
             # Decide number of rows
-            re = divmod(numerator*mult, denominator)
+            re = divmod(num*mult, den)
             quo = re[0]
             rem = re[1]
           
@@ -124,7 +124,7 @@ class FrV():
               rows = quo + 1
           
             # Create a frame with white background color
-            frame = np.array([["ffffff"]*denominator for row in range (rows)])
+            frame = np.array([["ffffff"]*den for row in range (rows)])
             #frame_copy = frame.copy()
             #frame_list.append(frame_copy) 
             
@@ -132,14 +132,14 @@ class FrV():
                 # Decide color
                 result = divmod(i, len(list(self.color_dict)))
                 
-                start_grid = numerator * i
-                end_grid = numerator * (i+1)
+                start_grid = num * i
+                end_grid = num * (i+1)
                 
                 
-                frame_reshape = np.reshape(frame, (1, rows*denominator))
+                frame_reshape = np.reshape(frame, (1, rows*den))
                 im_fill(frame_reshape, [0, 0], [start_grid, end_grid-1], list(self.color_dict.values())[result[1]])
     
-                frame = np.reshape(frame_reshape, (rows, denominator))
+                frame = np.reshape(frame_reshape, (rows, den))
                 frame_copy = frame.copy()
                 frame_rgb = make_rgb(frame_copy) 
                 
