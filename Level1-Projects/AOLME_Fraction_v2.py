@@ -257,10 +257,13 @@ class FrV():
         return video
 
     def insertImage(self, img_name):
-        height, width = self.frame_array_list[-1].shape[0:2]
         img_ori = cv2.imread(img_name)
+        try:
+            height, width = self.frame_array_list[-1].shape[0:2]
         
-
+        except:
+            height, width = 288, 432
+        
         h, w = img_ori.shape[0:2]
         #print(h, w)
         new_h = height
